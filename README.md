@@ -24,3 +24,17 @@ Just opens the command prompt in that folder.
 Only valid when right-clicking in an empty space in any folder.
 
 Just opens the command prompt in that folder, as admin, and will ask for UAC elevation
+
+# Paste As
+Valid for any file in the clipboard, when right-clicking in empty space in any folder.
+
+Instead of pasting as "OldFile - Copy.<extension>" it will prompt for a name to paste as.
+It's just pasting with a customizable name, while keeping the original extension is parametrized and controlled by the checkbox.
+
+In case the checkbox is unchecked, the file will be pasted as-is (that is, as it's written) and omitting the extension in the input
+will paste the file with no extension; however changing the extension is possible by just including the new extension in the input itself.
+
+In case the checkbox is checked, if the new file also contains an extension, it will be considered as part of the name, and the
+original extension will be put last.
+
+In case a file overwrite needs to happen - either by overwriting some other file or the original itself - you will be presented with a dialog to decide.
