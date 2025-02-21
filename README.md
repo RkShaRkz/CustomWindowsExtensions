@@ -14,3 +14,13 @@ Useful for when you just want to run something (that windows can "break" by goin
 worrying whether that will happen or not.
 
 Whatever the reason, this one can run executables with one of these three effects.
+
+# Command Prompt
+Only valid when right-clicking in an empty space in any folder.
+
+Just opens the command prompt in that folder.
+
+# Command Prompt (Admin)
+Only valid when right-clicking in an empty space in any folder.
+
+Just opens the command prompt in that folder, as admin, and will ask for UAC elevation
