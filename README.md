@@ -38,3 +38,14 @@ In case the checkbox is checked, if the new file also contains an extension, it 
 original extension will be put last.
 
 In case a file overwrite needs to happen - either by overwriting some other file or the original itself - you will be presented with a dialog to decide.
+
+# CreateSymLink
+
+When right-clicking in an empty space in any folder, it creates a symbollic link (in that folder) towards something else you pick.
+
+The context menu will offer 3 different options, one for Files (with a File Picker), one for Folders (with a Folder Picker) and a Custom one.
+
+The "Custom" one allows for inputting the exact path to whatever you want to create a symlink to, followed by creating either a File or Folder symlink.
+
+For convenience, it will also let you browse for the file/folder you want to link to. The pickers it opens will also start in the path you have already entered
+in the input box. The "custom" one is really the most versatile one, but a bit harder (less user-friendly) to use than the other two.
