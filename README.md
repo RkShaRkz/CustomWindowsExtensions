@@ -1,6 +1,20 @@
 # CustomWindowsExtensions
 My Custom Windows shell extensions
 
+
+# Usage
+Obviously, these aren't quite ready to work out of the box on any system when you just fork the repo (or download it's contents).
+For reference, I keep all of this in the `S:/OTPAD ZA STVARI/CUSTOM WINDOWS EXTENSIONS/` folder.
+
+So, when you fork the repo or extract the ZIP to e.g. `C:/SharkShellExtensions` you **must** also go through each of the `.reg` files
+and update the registry values to invoke the correct path to the scripts.
+
+Afterwards, just apply the registry file for the shell extension you're interested in using and there you go.
+
+*NOTE*: Pull-request(s) for additional useful custom shell extensions or one that renames these paths to `<PLACEHOLDER>` along with a script
+that changes that `<PLACEHOLDER>` value with the folder it's executed from is most welcome.
+
+
 # SnoozeGuard
 Only valid for executable (`*.exe`) files.
 When right-clicking an EXE file, this shell extension helps run it with special "priviledges".
@@ -40,7 +54,6 @@ original extension will be put last.
 In case a file overwrite needs to happen - either by overwriting some other file or the original itself - you will be presented with a dialog to decide.
 
 # CreateSymLink
-
 When right-clicking in an empty space in any folder, it creates a symbollic link (in that folder) towards something else you pick.
 
 The context menu will offer 3 different options, one for Files (with a File Picker), one for Folders (with a Folder Picker) and a Custom one.
