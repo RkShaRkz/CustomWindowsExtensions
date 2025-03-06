@@ -1,4 +1,3 @@
-Add-Type -AssemblyName PresentationFramework
 # Function to check for elevated privileges
 function Test-Admin {
     $currentUser = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
@@ -6,7 +5,10 @@ function Test-Admin {
 }
 
 function Confirm-Overwrite {
-    param ($linkPath)
+    param (
+        $linkPath
+    )
+    Add-Type -AssemblyName PresentationFramework
 
     # Presume that it's not a folder
     $isDirectory = $false
