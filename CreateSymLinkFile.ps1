@@ -65,24 +65,23 @@ if ($selectedPath) {
 
     # Escape wildcard characters in the paths
     $escapedLinkPath = Escape-WildcardCharacters -path $linkPath
-    $escapedSelectedPath = Escape-WildcardCharacters -path $selectedPath
+    $selectedPath = Escape-WildcardCharacters -path $selectedPath
 
     Write-Output "Original Working Directory: $originalWorkingDirectory"
     Write-Output "Current Directory: $currentDir"
     Write-Output "Selected Path: $selectedPath"
-    Write-Output "Escaped Selected Path: $escapedSelectedPath"
     Write-Output "Link Path: $linkPath"
     Write-Output "Escaped Link Path: $escapedLinkPath"
 
-    if (Test-Path -Path $escapedSelectedPath -PathType Leaf) {
+    if (Test-Path -Path $selectedPath -PathType Leaf) {
         if (Test-Path -Path $escapedLinkPath) {
             $choice = Confirm-Overwrite -linkPath $linkPath
             if ($choice -eq 'Yes') {
                 # Remove the existing symlink
                 Remove-Item -Path $escapedLinkPath -Force
                 # Create a new file symbolic link
-                New-Item -ItemType SymbolicLink -Path $linkPath -Target $escapedSelectedPath -ErrorAction Stop
-                Write-Output "Overwritten file symbolic link: $escapedLinkPath -> $escapedSelectedPath"
+                New-Item -ItemType SymbolicLink -Path $linkPath -Target $selectedPath -ErrorAction Stop
+                Write-Output "Overwritten file symbolic link: $escapedLinkPath -> $selectedPath"
             } elseif ($choice -eq 'No') {
                 Write-Output "Symbolic link (or file/folder with that name) already existed! Operation canceled by user by not overwriting."
             } else {
@@ -90,8 +89,8 @@ if ($selectedPath) {
             }
         } else {
             # Create a new file symbolic link
-            New-Item -ItemType SymbolicLink -Path $linkPath -Target $escapedSelectedPath -ErrorAction Stop
-            Write-Output "Created file symbolic link: $escapedLinkPath -> $escapedSelectedPath"
+            New-Item -ItemType SymbolicLink -Path $linkPath -Target $selectedPath -ErrorAction Stop
+            Write-Output "Created file symbolic link: $escapedLinkPath -> $selectedPath"
         }
     } else {
         Write-Output "The selected path is not a file."
