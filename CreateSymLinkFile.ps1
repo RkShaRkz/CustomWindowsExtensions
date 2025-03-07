@@ -5,27 +5,10 @@ function Test-Admin {
 }
 
 function Confirm-Overwrite {
-    param (
-        $linkPath
-    )
+    param ($linkPath)
     Add-Type -AssemblyName PresentationFramework
 
-    # Presume that it's not a folder
-    $isDirectory = $false
-
-    if (-not [string]::IsNullOrWhiteSpace($linkPath)) {
-        # If the input box isn't empty, check if it's a valid path
-        if (Test-Path $linkPath -PathType Leaf) {
-            # if the path points to a file, it is not a folder
-            $isDirectory = $false
-        }
-        elseif (Test-Path $linkPath -PathType Container) {
-            # if the path points to a folder, it is a folder
-            $isDirectory = $true
-        }
-    }
-
-    $message = "A $(if ($isDirectory) { 'folder' } else { 'file' }) with the name '$(Split-Path $linkPath -Leaf)' already exists. Overwrite?"
+    $message = "A file with the name '$(Split-Path $linkPath -Leaf)' already exists. Overwrite?"
     $result = [System.Windows.MessageBox]::Show(
         $message,
         "Confirm Overwrite",
@@ -35,10 +18,9 @@ function Confirm-Overwrite {
     return $result
 }
 
+# Function to escape wildcard characters in a path
 function Escape-WildcardCharacters {
-    param (
-        [string]$path
-    )
+    param ([string]$path)
     $escapedPath = $path -replace '([*?\[\]])', '``$1'
     return $escapedPath
 }
@@ -67,13 +49,11 @@ function Show-FilePickerDialog {
     $dialog.Filter = "All files (*.*)|*.*"
     if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
         return $dialog.FileName
-    }
-    else {
+    } else {
         return $null
     }
 }
 
-# Function to escape wildcard characters in a path
 
 # Main script
 $selectedPath = Show-FilePickerDialog
@@ -94,35 +74,29 @@ if ($selectedPath) {
     Write-Output "Link Path: $linkPath"
     Write-Output "Escaped Link Path: $escapedLinkPath"
 
-    # Check if selected item is a file, and then check if we already have a file with that name and offer to overwrite if we do
     if (Test-Path -Path $escapedSelectedPath -PathType Leaf) {
         if (Test-Path -Path $escapedLinkPath) {
-            $choice = Confirm-Overwrite -linkPath $escapedLinkPath
+            $choice = Confirm-Overwrite -linkPath $linkPath
             if ($choice -eq 'Yes') {
                 # Remove the existing symlink
                 Remove-Item -Path $escapedLinkPath -Force
                 # Create a new file symbolic link
                 New-Item -ItemType SymbolicLink -Path $linkPath -Target $escapedSelectedPath -ErrorAction Stop
                 Write-Output "Overwritten file symbolic link: $escapedLinkPath -> $escapedSelectedPath"
-            }
-            elseif ($choice -eq 'No') {
+            } elseif ($choice -eq 'No') {
                 Write-Output "Symbolic link (or file/folder with that name) already existed! Operation canceled by user by not overwriting."
-            }
-            else {
+            } else {
                 Write-Output "Operation canceled by user."
             }
-        }
-        else {
+        } else {
             # Create a new file symbolic link
             New-Item -ItemType SymbolicLink -Path $linkPath -Target $escapedSelectedPath -ErrorAction Stop
             Write-Output "Created file symbolic link: $escapedLinkPath -> $escapedSelectedPath"
         }
-    }
-    else {
+    } else {
         Write-Output "The selected path is not a file."
     }
-}
-else {
+} else {
     Write-Output "No file was selected."
 }
 
