@@ -54,7 +54,6 @@ function Show-FilePickerDialog {
     }
 }
 
-
 # Main script
 $selectedPath = Show-FilePickerDialog
 
