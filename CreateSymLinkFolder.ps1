@@ -26,13 +26,13 @@ function Escape-WildcardCharacters {
 
 # Save the initial working directory
 $initialWorkingDirectory = [System.IO.Directory]::GetCurrentDirectory()
-$escapedInitialWorkingDirectory = Escape-WildcardCharacters -path $initialWorkingDirectory
+$initialWorkingDirectory = Escape-WildcardCharacters -path $initialWorkingDirectory
 
 if (-not (Test-Admin)) {
     Write-Output "Please run this script as an administrator. Let's try rerunning automatically..."
     
     # Re-run the script with elevated privileges, passing the initial working directory as an argument
-    Start-Process -FilePath "powershell.exe" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`" `"$escapedInitialWorkingDirectory`"" -Verb RunAs
+    Start-Process -FilePath "powershell.exe" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`" `"$initialWorkingDirectory`"" -Verb RunAs
     Exit  # Exit the non-elevated instance
 }
 
