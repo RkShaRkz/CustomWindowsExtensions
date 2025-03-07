@@ -44,7 +44,7 @@ Set-Location -Path $originalWorkingDirectory
 function Show-FolderPickerDialog {
     Add-Type -AssemblyName System.Windows.Forms
     $dialog = New-Object System.Windows.Forms.FolderBrowserDialog
-    $dialog.Description = "Select a folder to create a symbolic link"
+    $dialog.Description = "Select a folder to create a symbolic link to"
     $dialog.SelectedPath = [System.IO.Directory]::GetCurrentDirectory()
     if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
         return $dialog.SelectedPath
@@ -63,24 +63,23 @@ if ($selectedPath) {
 
     # Escape wildcard characters in the paths
     $escapedLinkPath = Escape-WildcardCharacters -path $linkPath
-    $escapedSelectedPath = Escape-WildcardCharacters -path $selectedPath
+    $selectedPath = Escape-WildcardCharacters -path $selectedPath
 
     Write-Output "Original Working Directory: $originalWorkingDirectory"
     Write-Output "Current Directory: $currentDir"
     Write-Output "Selected Path: $selectedPath"
-    Write-Output "Escaped Selected Path: $escapedSelectedPath"
     Write-Output "Link Path: $linkPath"
     Write-Output "Escaped Link Path: $escapedLinkPath"
 
-    if (Test-Path -Path $escapedSelectedPath -PathType Container) {
+    if (Test-Path -Path $selectedPath -PathType Container) {
         if (Test-Path -Path $escapedLinkPath) {
             $choice = Confirm-Overwrite -linkPath $escapedLinkPath
             if ($choice -eq 'Yes') {
                 # Remove the existing symlink
                 Remove-Item -Path $escapedLinkPath -Force
                 # Create a new directory symbolic link
-                New-Item -ItemType SymbolicLink -Path $linkPath -Target $escapedSelectedPath -ErrorAction Stop
-                Write-Output "Overwritten directory symbolic link: $escapedLinkPath -> $escapedSelectedPath"
+                New-Item -ItemType SymbolicLink -Path $linkPath -Target $selectedPath -ErrorAction Stop
+                Write-Output "Overwritten directory symbolic link: $escapedLinkPath -> $selectedPath"
             } elseif ($choice -eq 'No') {
                 Write-Output "Symbolic link (or file/folder with that name) already existed! Operation canceled by user by not overwriting."
             } else {
@@ -88,8 +87,8 @@ if ($selectedPath) {
             }
         } else {
             # Create a new directory symbolic link
-            New-Item -ItemType SymbolicLink -Path $linkPath -Target $escapedSelectedPath -ErrorAction Stop
-            Write-Output "Created directory symbolic link: $escapedLinkPath -> $escapedSelectedPath"
+            New-Item -ItemType SymbolicLink -Path $linkPath -Target $selectedPath -ErrorAction Stop
+            Write-Output "Created directory symbolic link: $escapedLinkPath -> $selectedPath"
         }
     } else {
         Write-Output "The selected path is not a folder."
